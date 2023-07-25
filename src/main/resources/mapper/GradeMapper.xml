@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.sms.dao.GradeMapper">
+    <select id="selectAll" resultType="Grade">
+        select
+            *
+        from
+            tb_grade
+    </select>
+    <insert id="addGrade" parameterType="Grade">
+        insert into
+            tb_grade
+        values(#{id},#{name},#{manager},#{email},#{telephone},#{introducation});
+    </insert>
+    <update id="update" parameterType="Grade">
+        update tb_grade
+        <set>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="manager!=null and manager!=''">manager=#{manager},</if>
+            <if test="introducation!=null and introducation!=''">introducation=#{introducation},</if>
+            <if test="email!=null and email!=''">email=#{email},</if>
+            <if test="telephone!=null and telephone!=''">telephone=#{telephone},</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="delete" parameterType="Arraylist">
+        delete from tb_grade where id in
+        <foreach collection="array" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <select id="selectGradeList" parameterType="Grade" resultType="Grade">
+        select
+        *
+        from
+        tb_grade
+        <where>
+            <if test="name!=null and name!=''">
+                name like concat(concat('%',#{name},'%'))
+            </if>
+        </where>
+    </select>
+    <select id="findByName" parameterType="String" resultType="Grade">
+        select
+            *
+        from
+            tb_grade
+        where
+            name=#{name}
+    </select>
+</mapper>

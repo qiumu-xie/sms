@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.sms.dao.ClazzMapper">
+    <insert id="addClazz" parameterType="Clazz">
+        insert into
+            tb_clazz
+        values(#{id},#{name},#{number},#{introducation},#{coordinator},#{email},#{telephone},#{grade_name});
+    </insert>
+    <update id="update" parameterType="Clazz">
+        update tb_clazz
+        <set>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="number!=null and number!=''">number=#{number},</if>
+            <if test="introducation!=null and introducation!=''">introducation=#{introducation},</if>
+            <if test="email!=null and email!=''">email=#{email},</if>
+            <if test="telephone!=null and telephone!=''">telephone=#{telephone},</if>
+            <if test="coordinator!=null and coordinator!=''">coordinator=#{coordinator},</if>
+            <if test="grade_name!=null and grade_name!=''">grade_name=#{grade_name},</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="delete" parameterType="Arraylist">
+        delete from tb_clazz where id in
+        <foreach collection="array" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <select id="selectClazzList" parameterType="Clazz" resultType="Clazz">
+        select
+        *
+        from
+        tb_clazz
+        <where>
+            <if test="grade_name!=null and grade_name!=''">
+                and grade_name=#{grade_name}
+            </if>
+            <if test="name!=null and name!=''">
+                and name like concat(concat('%',#{name},'%'))
+            </if>
+        </where>
+    </select>
+    <select id="findByName" parameterType="String" resultType="Clazz">
+        select
+            *
+        from
+            tb_clazz
+        where
+            name=#{name}
+    </select>
+    <select id="selectAll" resultType="Clazz">
+        select
+            *
+        from
+            tb_clazz
+    </select>
+</mapper>
